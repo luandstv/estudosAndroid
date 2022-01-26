@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 
     private var revenue = 0
     private var dessertsSold = 0
+    private lateinit var dessertTimer: DessertTimer
 
     // Contains all the views
     private lateinit var binding: ActivityMainBinding
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i("MainActivity", "onCreate Chamado/Called")
+        Log.i("MainActivity", "onCreate Called")
 
         // Use Data Binding to get reference to the views
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -74,6 +75,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         binding.dessertButton.setOnClickListener {
             onDessertClicked()
         }
+        dessertTimer = DessertTimer(this.lifecycle)
 
         // Set the TextViews to the right values
         binding.revenue = revenue
@@ -150,8 +152,35 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         return super.onOptionsItemSelected(item)
     }
 
+    /** Lifecycle Methods **/
+
     override fun onStart() {
         super.onStart()
-        Timber.i("onStart Chamado/Called")
+        Timber.i("onStart Called")
+    }
+
+    override fun onResume() {  // neste estado o app tem o foco
+        super.onResume()
+        Timber.i("onResume chamado")
+    }
+
+    override fun onPause() { // quando estar no onPause
+        super.onPause()
+        Timber.i("onPause chamado")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Timber.i("onRestart chamado")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Timber.i("onStop chamado")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Timber.i("onDestroy chamado")
     }
 }
