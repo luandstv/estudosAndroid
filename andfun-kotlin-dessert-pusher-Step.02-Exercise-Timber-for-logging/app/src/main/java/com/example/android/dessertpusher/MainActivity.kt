@@ -18,6 +18,7 @@ package com.example.android.dessertpusher
 
 import android.content.ActivityNotFoundException
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -28,6 +29,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleObserver
 import com.example.android.dessertpusher.databinding.ActivityMainBinding
 import timber.log.Timber
+
+const val KEY_REVENUE =  "key_revenue"
+const val KEY_DESSERT_SOLD =  "key_dessert_sold"
+const val KEY_DESSERT_TIMER =  "key_dessert_timer"
 
 class MainActivity : AppCompatActivity(), LifecycleObserver {
 
@@ -68,6 +73,12 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i("MainActivity", "onCreate Called")
+
+        if (savedInstanceState != null) {
+            revenue = savedInstanceState.getInt(KEY_REVENUE, 0)
+            dessertsSold = savedInstanceState.getInt(KEY_DESSERT_SOLD, 0)
+            dessertTimer.secondsCount = savedInstanceState.getInt(KEY_DESSERT_TIMER, 0)
+        }
 
         // Use Data Binding to get reference to the views
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -154,9 +165,25 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 
     /** Lifecycle Methods **/
 
+
+
     override fun onStart() {
         super.onStart()
         Timber.i("onStart Called")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(KEY_REVENUE, revenue)
+        outState.putInt(KEY_DESSERT_SOLD, dessertsSold)
+        outState.putInt(KEY_DESSERT_TIMER, dessertTimer.secondsCount)
+        Timber.i("chamei vlw")
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        Timber.i("retornei vlw")
+
     }
 
     override fun onResume() {  // neste estado o app tem o foco
@@ -183,4 +210,5 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         super.onDestroy()
         Timber.i("onDestroy chamado")
     }
+
 }
